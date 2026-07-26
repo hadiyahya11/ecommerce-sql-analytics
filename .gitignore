@@ -1,0 +1,14 @@
+# Ignore virtual environments
+.vex/
+.venv/
+venv/
+
+
+# Ignore databases
+*.db
+*.sqlite
+*sql
+
+# Ignore raw data files
+data/
+*.csv
