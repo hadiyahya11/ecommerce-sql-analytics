@@ -8,10 +8,13 @@ This project is an end-to-end data pipeline and SQL analytics portfolio piece bu
 An end-to-end data engineering and analytics project using Python and SQL to extract actionable business insights from a real-world e-commerce database (100k+ orders).
 
 📊 Key Business Insights
+
 1. Logistics Dictate Customer SatisfactionThe Data: Orders delivered before their estimated date received an average review score of 4.29 / 5.0.  The Data: Orders delivered after their estimated date saw a catastrophic drop in average review score to 2.34 / 5.0.  Actionable Takeaway: Supply chain bottlenecks are  harming brand reputation. The business must prioritize fulfillment speed and set more conservative estimated delivery dates to manage expectations.
 2. Payment Architecture & Big SpendersThe Data: Credit cards absolutely dominate the platform, generating over 12.5 million BRL in revenue. Customers also use an average of 3.5 installments when paying by credit card.  Actionable Takeaway: The installment feature is a massive driver for high-ticket items. Marketing campaigns should prominently feature "buy now, pay later" messaging to continue driving conversion on expensive products.
 3. Product Quality Outliers The Data: The fraldas_higiene (diapers/hygiene) and moveis_escritorio (office furniture) categories have the lowest average review scores on the platform (3.25 and 3.49, respectively) despite having a statistically significant number of reviews.  Actionable Takeaway: The vendor management team needs to audit the suppliers in these two categories immediately to reduce return rates and customer churn.
+
 🎯 Customer Retention (RFM Model)
+
 Using an advanced RFM (Recency, Frequency, Monetary) segmentation model built entirely in SQL with CTEs and Window Functions, the customer base was classified into distinct marketing groups:
 
 Champions (15,554 customers): Your absolute best customers. They bought recently, buy often, and spend the most.
@@ -38,7 +41,7 @@ Other (19,702 customers): The "average" middle-of-the-pack consumers who don't f
 
     Strategy: Keep them engaged with standard promotional newsletters and seasonal sales, testing different messaging to see if they can be pushed into the "Loyal" tier.
 
-![RFM Customer Segments](assets/rfm_results.png)
+![RFM Customer Segments](assets/rfm_result.png)
 
 ## Tech Stack
 *   **Language:** Python 3.9
