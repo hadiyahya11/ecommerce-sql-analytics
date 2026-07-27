@@ -1,7 +1,7 @@
 # Brazilian E-Commerce SQL Analytics
 
 ## Project Overview
-This project is an end-to-end data pipeline and SQL analytics portfolio piece built during a 24-hour data sprint. It transforms 100,000+ rows of raw, real-world e-commerce data into a fully functional relational database to uncover business insights regarding customer behavior, revenue generation, and supply chain efficiency.
+This project is an end-to-end data pipeline and SQL analytics portfolio piece. It transforms 100,000+ rows of raw, real-world e-commerce data into a fully functional relational database to uncover business insights regarding customer behavior, revenue generation, and supply chain efficiency.
 
 🇧🇷 Brazil E-Commerce Analytics & Customer Segmentation
 
