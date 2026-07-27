@@ -28,5 +28,7 @@ ecommerce-sql-project/
 ├── data/                  <-- User must create this and add Kaggle CSVs
 ├── load_data.ipynb        <-- Python ETL script that builds the database
 ├── olist.db               <-- Generated SQLite database (Ignored in Git)
+├── queries/
+│   └── rfm_segmentation.sql
 ├── .gitignore             <-- Excludes environments and heavy data files
 └── README.md              <-- Project documentation
