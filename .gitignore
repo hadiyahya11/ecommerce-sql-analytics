@@ -6,8 +6,7 @@ venv/
 
 # Ignore databases
 *.db
-*.sqlite
-*sql
+
 
 # Ignore raw data files
 data/
