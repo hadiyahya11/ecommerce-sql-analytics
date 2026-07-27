@@ -7,6 +7,8 @@ venv/
 # Ignore databases
 *.db
 
+##Ignore the google big query credentials 
+bq_creds.json
 
 # Ignore raw data files
 data/
