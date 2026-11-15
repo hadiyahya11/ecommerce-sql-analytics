@@ -1,5 +1,6 @@
 import os
 import sqlite3
+from contextlib import closing
 
 import pandas as pd
 
@@ -15,5 +16,7 @@ def get_connection():
 
 def read_sql(query):
     """Run a SQL query and return the result as a pandas DataFrame."""
-    with get_connection() as connection:
+    # closing(...) makes sure the connection is closed when the block ends.
+    # (A plain "with sqlite3 connection" only commits; it does NOT close it.)
+    with closing(get_connection()) as connection:
         return pd.read_sql_query(query, connection)

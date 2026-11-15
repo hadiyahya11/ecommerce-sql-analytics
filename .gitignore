@@ -21,3 +21,6 @@ reports/
 Brazil ecommerce insights.html
 Brazil ecommerce insights_files/
 *.pdf
+
+# Python cache
+__pycache__/
