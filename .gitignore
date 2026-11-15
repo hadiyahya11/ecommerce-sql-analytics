@@ -14,6 +14,9 @@ bq_creds.json
 data/
 *.csv
 
+#ignore reports folder
+reports/
+
 # Local-only files (dashboard export, personal documents)
 Brazil ecommerce insights.html
 Brazil ecommerce insights_files/
