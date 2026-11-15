@@ -13,3 +13,8 @@ bq_creds.json
 # Ignore raw data files
 data/
 *.csv
+
+# Local-only files (dashboard export, personal documents)
+Brazil ecommerce insights.html
+Brazil ecommerce insights_files/
+*.pdf
