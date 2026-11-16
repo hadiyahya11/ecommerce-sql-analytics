@@ -3,6 +3,7 @@ from contextlib import closing
 import pandas as pd
 
 from audit.db import get_connection, read_sql
+from audit.report import write_excel_report
 from audit.seller_risk import build_seller_features, score_sellers
 from audit.statistics import benford_analysis, late_delivery_review_test
 from audit.tests import TESTS
@@ -59,3 +60,7 @@ if __name__ == "__main__":
 
     print()
     print(summary.to_string(index=False))
+
+    # automated Excel report for auditors (M5)
+    report_path = write_excel_report(summary, exceptions, seller_risk, benford_results, statistical_tests)
+    print(f"\nExcel report: {report_path}")
