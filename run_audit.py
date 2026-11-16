@@ -3,6 +3,7 @@ from contextlib import closing
 import pandas as pd
 
 from audit.db import get_connection, read_sql
+from audit.seller_risk import build_seller_features, score_sellers
 from audit.statistics import benford_analysis, late_delivery_review_test
 from audit.tests import TESTS
 
@@ -40,6 +41,13 @@ if __name__ == "__main__":
           f"{p_text(benford_summary['p_value'])}")
     print(f"Mann-Whitney: effect size {review_test['effect_size']}, {p_text(review_test['p_value'])}")
 
+    # ML seller risk scoring (M4): uses this run's exceptions as one of the features
+    seller_risk = score_sellers(build_seller_features(exceptions))
+    print(f"\nSeller risk: {len(seller_risk)} sellers scored, "
+          f"{seller_risk['is_outlier'].sum()} flagged as outliers. Top 10:")
+    print(seller_risk.head(10)[['risk_rank', 'seller_id', 'seller_state', 'n_orders',
+                                 'risk_score', 'top_reasons']].to_string(index=False))
+
     # closing(...) closes the connection at the end of the block;
     # "with connection" saves (commits) the new tables.
     with closing(get_connection()) as connection, connection:
@@ -47,6 +55,7 @@ if __name__ == "__main__":
         summary.to_sql("audit_test_summary", connection, if_exists="replace", index=False)
         benford_results.to_sql("benford_results", connection, if_exists="replace", index=False)
         statistical_tests.to_sql("statistical_tests", connection, if_exists="replace", index=False)
+        seller_risk.to_sql("seller_risk", connection, if_exists="replace", index=False)
 
     print()
     print(summary.to_string(index=False))
