@@ -3,6 +3,7 @@ from contextlib import closing
 import pandas as pd
 
 from audit.db import get_connection, read_sql
+from audit.statistics import benford_analysis, late_delivery_review_test
 from audit.tests import TESTS
 
 if __name__ == "__main__":
@@ -28,11 +29,24 @@ if __name__ == "__main__":
     exceptions = pd.concat(all_exceptions, ignore_index=True)  # one table for all tests
     summary = pd.DataFrame(summary_rows)
 
+    # statistical analyses (M3)
+    benford_results, benford_summary = benford_analysis()
+    review_test = late_delivery_review_test()
+    statistical_tests = pd.DataFrame([benford_summary, review_test])
+    def p_text(p):
+        return "p<0.001" if p < 0.001 else f"p={p:.3f}"
+
+    print(f"\nBenford: {benford_summary['conclusion']}, chi2 {benford_summary['statistic']:,.0f}, "
+          f"{p_text(benford_summary['p_value'])}")
+    print(f"Mann-Whitney: effect size {review_test['effect_size']}, {p_text(review_test['p_value'])}")
+
     # closing(...) closes the connection at the end of the block;
     # "with connection" saves (commits) the new tables.
     with closing(get_connection()) as connection, connection:
         exceptions.to_sql("audit_exceptions", connection, if_exists="replace", index=False)
         summary.to_sql("audit_test_summary", connection, if_exists="replace", index=False)
+        benford_results.to_sql("benford_results", connection, if_exists="replace", index=False)
+        statistical_tests.to_sql("statistical_tests", connection, if_exists="replace", index=False)
 
     print()
     print(summary.to_string(index=False))

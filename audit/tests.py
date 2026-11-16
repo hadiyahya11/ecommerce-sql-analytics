@@ -215,3 +215,5 @@ TESTS = [
     {"test_id": "T06", "function": t06_missing_approval,
      "population_sql": "SELECT COUNT(*) AS n FROM orders WHERE order_status = 'delivered'"},
 ]
+
+
