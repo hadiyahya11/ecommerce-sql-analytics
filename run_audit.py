@@ -1,14 +1,19 @@
+import argparse
 from contextlib import closing
 
 import pandas as pd
 
 from audit.db import get_connection, read_sql
-from audit.report import write_excel_report
+from audit.report import publish_to_bigquery, write_excel_report
 from audit.seller_risk import build_seller_features, score_sellers
 from audit.statistics import benford_analysis, late_delivery_review_test
 from audit.tests import TESTS
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Run the audit analytics toolkit.")
+    parser.add_argument("--publish", action="store_true", help="also upload the results to BigQuery")
+    args = parser.parse_args()
+
     all_exceptions = []
     summary_rows = []
 
@@ -61,6 +66,20 @@ if __name__ == "__main__":
     print()
     print(summary.to_string(index=False))
 
-    # automated Excel report for auditors (M5)
+    # automated Excel report for auditors (M5): always written, even if publishing fails later
     report_path = write_excel_report(summary, exceptions, seller_risk, benford_results, statistical_tests)
     print(f"\nExcel report: {report_path}")
+
+    # BigQuery push for the dashboard: only when explicitly asked (python run_audit.py --publish)
+    if args.publish:
+        print("\nPublishing to BigQuery...")
+        publish_to_bigquery({
+            "audit_exceptions": exceptions,
+            "audit_test_summary": summary,
+            "seller_risk": seller_risk,
+            "benford_results": benford_results,
+            "statistical_tests": statistical_tests,
+        })
+        print("All tables published.")
+    else:
+        print("Not published to BigQuery (add --publish to refresh the dashboard).")

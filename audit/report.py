@@ -63,3 +63,30 @@ def write_excel_report(summary, exceptions, seller_risk, benford_results, statis
         _set_widths(sheet)
 
     return path
+
+
+# --- BigQuery publish (feeds the Looker Studio dashboard) -----------------------------
+
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BQ_PROJECT_ID = "bionic-baton-503716-n4"
+BQ_DATASET = "olist"
+BQ_KEY_PATH = os.path.join(PROJECT_ROOT, "bq_creds.json")  # git-ignored service-account key
+
+
+def publish_to_bigquery(tables):
+    """Upload each DataFrame to BigQuery, replacing the previous version.
+
+    tables: dict {table_name: DataFrame}, e.g. {"audit_exceptions": exceptions}.
+    Same table names as in SQLite, so the dashboard and the database always match.
+    """
+    # Imported here, not at the top: a local run without --publish doesn't need
+    # the Google libraries or credentials at all.
+    import pandas_gbq
+    from google.oauth2 import service_account
+
+    credentials = service_account.Credentials.from_service_account_file(BQ_KEY_PATH)
+    for table_name, df in tables.items():
+        destination = f"{BQ_DATASET}.{table_name}"
+        print(f"  Publishing {destination} ({len(df):,} rows)")
+        pandas_gbq.to_gbq(df, destination, project_id=BQ_PROJECT_ID,
+                          if_exists="replace", credentials=credentials)
